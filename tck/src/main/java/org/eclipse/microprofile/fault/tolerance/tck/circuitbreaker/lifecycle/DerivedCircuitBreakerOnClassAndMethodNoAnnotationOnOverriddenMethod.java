@@ -20,10 +20,12 @@
 package org.eclipse.microprofile.fault.tolerance.tck.circuitbreaker.lifecycle;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Typed;
+
 import java.io.IOException;
 
 @Dependent
-@CBLifecycle(CBLifecycleServiceType.BASE_CM_DERIVED_MISSING_ON_METHOD)
+@Typed(DerivedCircuitBreakerOnClassAndMethodNoAnnotationOnOverriddenMethod.class)
 public class DerivedCircuitBreakerOnClassAndMethodNoAnnotationOnOverriddenMethod extends BaseCircuitBreakerOnClassAndMethod {
     @Override
     public void service() throws IOException {

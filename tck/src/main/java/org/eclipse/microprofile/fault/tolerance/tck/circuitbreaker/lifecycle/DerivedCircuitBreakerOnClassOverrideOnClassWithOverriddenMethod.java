@@ -22,10 +22,12 @@ package org.eclipse.microprofile.fault.tolerance.tck.circuitbreaker.lifecycle;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Typed;
+
 import java.io.IOException;
 
 @Dependent
-@CBLifecycle(CBLifecycleServiceType.BASE_C_DERIVED_C_METHOD_OVERRIDE)
+@Typed(DerivedCircuitBreakerOnClassOverrideOnClassWithOverriddenMethod.class)
 @CircuitBreaker(requestVolumeThreshold = 4)
 public class DerivedCircuitBreakerOnClassOverrideOnClassWithOverriddenMethod extends BaseCircuitBreakerOnClass {
     @Override

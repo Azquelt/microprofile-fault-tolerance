@@ -20,9 +20,10 @@
 package org.eclipse.microprofile.fault.tolerance.tck.circuitbreaker.lifecycle;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Typed;
 
 @Dependent
-@CBLifecycle(CBLifecycleServiceType.BASE_C_DERIVED_NONE)
+@Typed(DerivedCircuitBreakerOnClassNoRedefinition.class)
 public class DerivedCircuitBreakerOnClassNoRedefinition extends BaseCircuitBreakerOnClass {
 }
 

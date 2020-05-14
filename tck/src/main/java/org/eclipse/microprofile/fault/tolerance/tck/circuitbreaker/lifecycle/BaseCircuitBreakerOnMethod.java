@@ -22,11 +22,13 @@ package org.eclipse.microprofile.fault.tolerance.tck.circuitbreaker.lifecycle;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Typed;
+
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Dependent
-@CBLifecycle(CBLifecycleServiceType.BASE_M)
+@Typed(BaseCircuitBreakerOnMethod.class)
 public class BaseCircuitBreakerOnMethod implements CircuitBreakerLifecycleService {
     private static final AtomicInteger COUNTER = new AtomicInteger();
 

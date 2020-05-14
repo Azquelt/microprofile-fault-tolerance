@@ -56,160 +56,111 @@ public class CircuitBreakerLifecycleTest extends Arquillian {
                 .addAsLibrary(testJar);
     }
 
+    @Inject
+    private Instance<Object> beans;
+
     // verify that circuit breaker is shared between instances of the same class and for the same method,
     // in various inheritance hierarchy scenarios
 
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_C)
-    private Instance<CircuitBreakerLifecycleService> baseC;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_C_DERIVED_C)
-    private Instance<CircuitBreakerLifecycleService> baseCderivedC;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_C_DERIVED_C_METHOD_OVERRIDE)
-    private Instance<CircuitBreakerLifecycleService> baseCderivedCmethodOverridden;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_C_DERIVED_M)
-    private Instance<CircuitBreakerLifecycleService> baseCderivedM;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_C_DERIVED_MISSING_ON_METHOD)
-    private Instance<CircuitBreakerLifecycleService> baseCderivedMissingOnMethod;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_C_DERIVED_NONE)
-    private Instance<CircuitBreakerLifecycleService> baseCderivedNone;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_M)
-    private Instance<CircuitBreakerLifecycleService> baseM;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_M_DERIVED_C)
-    private Instance<CircuitBreakerLifecycleService> baseMderivedC;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_M_DERIVED_C_METHOD_OVERRIDE)
-    private Instance<CircuitBreakerLifecycleService> baseMderivedCmethodOverridden;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_M_DERIVED_M)
-    private Instance<CircuitBreakerLifecycleService> baseMderivedM;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_M_DERIVED_MISSING_ON_METHOD)
-    private Instance<CircuitBreakerLifecycleService> baseMderivedMissingOnMethod;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_M_DERIVED_NONE)
-    private Instance<CircuitBreakerLifecycleService> baseMderivedNone;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_CM)
-    private Instance<CircuitBreakerLifecycleService> baseCM;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_CM_DERIVED_C)
-    private Instance<CircuitBreakerLifecycleService> baseCMderivedC;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_CM_DERIVED_C_METHOD_OVERRIDE)
-    private Instance<CircuitBreakerLifecycleService> baseCMderivedCmethodOverridden;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_CM_DERIVED_M)
-    private Instance<CircuitBreakerLifecycleService> baseCMderivedM;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_CM_DERIVED_MISSING_ON_METHOD)
-    private Instance<CircuitBreakerLifecycleService> baseCMderivedMissingOnMethod;
-
-    @Inject @CBLifecycle(CBLifecycleServiceType.BASE_CM_DERIVED_NONE)
-    private Instance<CircuitBreakerLifecycleService> baseCMderivedNone;
 
     @Test
     public void circuitBreakerOnClass() {
-        invokeService(baseC, 8);
+        invokeService(BaseCircuitBreakerOnClass.class, 8);
     }
 
     @Test
     public void circuitBreakerOnClassOverrideOnClass() {
-        invokeService(baseCderivedC, 4);
+        invokeService(DerivedCircuitBreakerOnClassOverrideOnClass.class, 4);
     }
 
     @Test
     public void circuitBreakerOnClassOverrideOnClassWithOverriddenMethod() {
-        invokeService(baseCderivedCmethodOverridden, 4);
+        invokeService(DerivedCircuitBreakerOnClassOverrideOnClassWithOverriddenMethod.class, 4);
     }
 
     @Test
     public void circuitBreakerOnClassOverrideOnMethod() {
-        invokeService(baseCderivedM, 4);
+        invokeService(DerivedCircuitBreakerOnClassOverrideOnMethod.class, 4);
     }
 
     @Test
     public void circuitBreakerOnClassMissingOnOverriddenMethod() {
-        invokeService(baseCderivedMissingOnMethod, 8);
+        invokeService(DerivedCircuitBreakerOnClassNoAnnotationOnOverriddenMethod.class, 8);
     }
 
     @Test
     public void circuitBreakerOnClassNoRedefinition() {
-        invokeService(baseCderivedNone, 8);
+        invokeService(DerivedCircuitBreakerOnClassNoRedefinition.class, 8);
     }
 
     @Test
     public void circuitBreakerOnMethod() {
-        invokeService(baseM, 8);
+        invokeService(BaseCircuitBreakerOnMethod.class, 8);
     }
 
     @Test
     public void circuitBreakerOnMethodOverrideOnClass() {
         // CB on inherited method takes precedence over CB on derived class
-        invokeService(baseMderivedC, 8);
+        invokeService(DerivedCircuitBreakerOnMethodOverrideOnClass.class, 8);
     }
 
     @Test
     public void circuitBreakerOnMethodOverrideOnClassWithOverriddenMethod() {
-        invokeService(baseMderivedCmethodOverridden, 4);
+        invokeService(DerivedCircuitBreakerOnMethodOverrideOnClassWithOverriddenMethod.class, 4);
     }
 
     @Test
     public void circuitBreakerOnMethodOverrideOnMethod() {
-        invokeService(baseMderivedM, 4);
+        invokeService(DerivedCircuitBreakerOnMethodOverrideOnMethod.class, 4);
     }
 
     @Test
     public void circuitBreakerOnMethodMissingOnOverriddenMethod() {
-        invokeService(baseMderivedMissingOnMethod, 100);
+        invokeService(DerivedCircuitBreakerOnMethodNoAnnotationOnOverriddenMethod.class, 100);
     }
 
     @Test
     public void circuitBreakerOnMethodNoRedefinition() {
-        invokeService(baseMderivedNone, 8);
+        invokeService(DerivedCircuitBreakerOnMethodNoRedefinition.class, 8);
     }
 
     @Test
     public void circuitBreakerOnClassAndMethod() {
-        invokeService(baseCM, 8);
+        invokeService(BaseCircuitBreakerOnClassAndMethod.class, 8);
     }
 
     @Test
     public void circuitBreakerOnClassAndMethodOverrideOnClass() {
         // CB on inherited method takes precedence over CB on derived class
-        invokeService(baseCMderivedC, 8);
+        invokeService(DerivedCircuitBreakerOnClassAndMethodOverrideOnClass.class, 8);
     }
 
     @Test
     public void circuitBreakerOnClassAndMethodOverrideOnClassWithOverriddenMethod() {
-        invokeService(baseCMderivedCmethodOverridden, 4);
+        invokeService(DerivedCircuitBreakerOnClassAndMethodOverrideOnClassWithOverriddenMethod.class, 4);
     }
 
     @Test
     public void circuitBreakerOnClassAndMethodOverrideOnMethod() {
-        invokeService(baseCMderivedM, 4);
+        invokeService(DerivedCircuitBreakerOnClassAndMethodOverrideOnMethod.class, 4);
     }
 
     @Test
     public void circuitBreakerOnClassAndMethodMissingOnOverriddenMethod() {
         // missing on overridden method, so inherited from base class
-        invokeService(baseCMderivedMissingOnMethod, 16);
+        invokeService(DerivedCircuitBreakerOnClassAndMethodNoAnnotationOnOverriddenMethod.class, 16);
     }
 
     @Test
     public void circuitBreakerOnClassAndMethodNoRedefinition() {
-        invokeService(baseCMderivedNone, 8);
+        invokeService(DerivedCircuitBreakerOnClassAndMethodNoRedefinition.class, 8);
     }
 
-    private void invokeService(Instance<CircuitBreakerLifecycleService> serviceProvider, int expectedCallsNotPrevented) {
+    private <T extends CircuitBreakerLifecycleService> void invokeService(Class<T> clazz, int expectedCallsNotPrevented) {
+        Instance<T> serviceProvider = beans.select(clazz);
         int servicesCount = expectedCallsNotPrevented / 2;
 
-        List<CircuitBreakerLifecycleService> services = new ArrayList<>(servicesCount);
+        List<T> services = new ArrayList<>(servicesCount);
         for (int i = 0; i < servicesCount; i++) {
             services.add(serviceProvider.get());
         }
@@ -239,7 +190,7 @@ public class CircuitBreakerLifecycleTest extends Arquillian {
             }
         }
         finally {
-            for (CircuitBreakerLifecycleService service : services) {
+            for (T service : services) {
                 serviceProvider.destroy(service);
             }
         }
